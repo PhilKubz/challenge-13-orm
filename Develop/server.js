@@ -8,10 +8,17 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(routes);
+// linking the API routes
+app.use('/api', routes);
 
-sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
+// Synchronize the models with the database
+sequelize.sync({ force: false })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`App listening on port ${PORT}!`);
+    });
+  })
+  .catch((error) => {
+    console.error('Unable to synchronize the database:', error);
   });
-});
+
